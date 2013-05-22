@@ -100,7 +100,7 @@
       };
 
       var drawLines = function(lines, s, m, h) {
-        var start, hue, saturation, saturationStep, lightness, lightnessStep, alpha, alphaStep, width, widthStep, widthStart;
+        var start, hue, saturation, lightness, alpha, alphaStep, width, widthStep;
 
         // Color
         hue = $scope.clock.color.hue;
@@ -108,7 +108,6 @@
         lightness = $scope.clock.color.lightness;
         alpha = $scope.clock.color.alpha;
         
-        widthStart = $scope.clock.width;
         alphaStep = parseFloat($scope.clock.connections / 255.0);
         sketch.translate(200.0, 200.0); // Set origin to center of sketch
 
@@ -116,12 +115,12 @@
           start = [0.0, 0.0]; // Start from center
           alpha = $scope.clock.color.alpha;
           hue = $scope.clock.color.hue;
-          width = widthStart * ($scope.clock.repetitions - r) / $scope.clock.repetitions;
+          width = $scope.clock.width * ($scope.clock.repetitions - r) / $scope.clock.repetitions;
           widthStep = width / ($scope.clock.connections * 4);
 
           // Make main line slightly thicker
           if (r == 0) {
-            width *= 1.5;
+            width *= 1.25;
           }
 
           for (var c = $scope.clock.connections - 1; c >= 0; c--) {
