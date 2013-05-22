@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Fractal Clock</title>
+  <meta name="title" content="Fractal Clock"></meta>
+  <meta name="content" content="Eye candy built with AngularJS and ProcessingJS"></meta>
+  <meta name="keywords" content="AngularJS ProcessingJS Javascript Fractal Clock"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"></link>
+  <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css"></link>
+  <link href="/css/style.css" rel="stylesheet" type="text/css"></link>
+</head>
+<body>
+  <div ng-app="fractalClock" ng-controller="FractalClockController">
+    <h1>Fractal Clock</h1>
+    <canvas processing="sketch"></canvas>
+    <div>
+      <dl>
+        <dt>Hue</dt>
+        <dd><input type="range" ng-model="clock.color.hue" min="0" max="255" integer /></dd>
+
+        <dt>Saturation</dt>
+        <dd><input type="range" ng-model="clock.color.saturation" min="0" max="255" integer /></dd>
+
+        <dt>Lightness</dt>
+        <dd><input type="range" ng-model="clock.color.lightness" min="0" max="255" integer /></dd>
+
+        <dt>Alpha</dt>
+        <dd><input type="range" ng-model="clock.color.alpha" min="0" max="255" integer /></dd>
+
+        <dt>Shift</dt>
+        <dd><input type="range" ng-model="clock.color.shift" min="-100" max="100" integer /></dd>
+
+        <dt>Width</dt>
+        <dd><input type="range" ng-model="clock.width" min="1" max="100" float /></dd>
+
+        <dt>Length</dt>
+        <dd><input type="range" ng-model="clock.length" min="1" max="200" float /></dd>
+
+        <dt>Repetitions</dt>
+        <dd><input type="range" ng-model="clock.repetitions" min="1" max="40" integer /></dd>
+
+        <dt>Connections</dt>
+        <dd><input type="range" ng-model="clock.connections" min="1" max="40" integer /></dd>
+      </dl>
+    </div>
+  </div>
+  <script type="text/javascript" src="/app/lib/angular/angular-1.1.4.min.js"></script>
+  <script type="text/javascript" src="/app/lib/processing/processing-1.4.1.min.js"></script>
+  <script type="text/javascript" src="/app/app.js"></script>
+
+  <hr />
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'ngfractalclock'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      window.setTimeout(function() {
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          // (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+      }, 3000);
+  </script>
+  <!-- <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</body>
+</html>
