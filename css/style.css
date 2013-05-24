@@ -1,17 +1,17 @@
 html{
-  background: #f2f2f2;
+  background: #111;
 }
 
 body{
-  background: #fff;
+  background: #222;
   margin: 0 auto;
   width: 900px;
   padding: 20px;
   font-size: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-top: none;
   font-family: Lato, arial, sans-serif;
-  color: #222;
+  color: #ccc;
 }
 
 a{
@@ -24,12 +24,19 @@ h1, h2, h3, h4, h5, h6{
   padding: 0;
 }
 
+h1{
+  margin: 0 0 10px;
+  padding: 0 0 10px;
+  border-bottom: 2px solid #555;
+  font-size: 32px;
+}
+
 hr{
   margin: 16px 0;
   padding: 0;
   border: none;
   height: 2px;
-  background: #ccc;
+  background: #555;
 }
 
 dl{
@@ -82,23 +89,21 @@ canvas{
 code, pre{
   font-size: inherit;
   font-family: consolas, inconsolata, fixed;
-  color: #000;
+  color: #fff;
 }
 
 code{
-  background: #ffa;
+  background: #444;
 }
 
 pre{
-  background: #f2f2f2;
+  background: #444;
   padding: 8px;
-  border: 1px dashed #ccc;
+  border: 1px dashed #555;
 }
 
 #demo{
   overflow: hidden;
-  border: 1px solid #ccc;
-  padding: 20px;
 }
 
 #sketch{

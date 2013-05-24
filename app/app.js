@@ -34,22 +34,36 @@
     };
   });
 
+  fractalClock.directive('source', function($http) {
+    return function(scope, iElement, iAttrs) {
+      var source = iAttrs.source;
+      $http.get(source).then(function(res) {
+        iElement.html(res.data);
+      });
+    };
+  });
+
   fractalClock.controller('FractalClockController', function($scope, $timeout) {
     $scope.clock = {
-      width: 5.0,
+      width: 2.5,
       length: 40.0,
-      repetitions: 10,
-      connections: 10,
+      repetitions: 40,
+      connections: 12,
+      phase: 0.0,
+      speed: 2.0,
+      timezoneOffset: new Date().getTimezoneOffset() * 60000,
       color: {
-        hue: 150,
+        hue: 160,
         saturation: 255,
         lightness: 255,
-        alpha: 165,
-        shift: -5
+        alpha: 200,
+        fill: 80,
+        shift: {
+          repetitions: 100,
+          connections: 100
+        }
       }
     };
-
-    $scope.debug = [];
 
     $scope.sketch = function(sketch) {
       var date;
@@ -61,21 +75,22 @@
         sketch.smooth();
         sketch.colorMode(sketch.HSB, 255);
         sketch.strokeCap(sketch.ROUND);
+        sketch.strokeJoin(sketch.ROUND);
       };
 
       sketch.draw = function() {
         sketch.background(0);
 
         var currentDate = new Date();
-        var time = currentDate.getTime();
+        var time = currentDate.getTime() + $scope.clock.timezoneOffset;
         var s = sketch.map(time % 60000, 0, 60000, 0, sketch.TWO_PI) - sketch.HALF_PI;
         var m = sketch.map(time % 3600000, 0, 3600000, 0, sketch.TWO_PI) - sketch.HALF_PI;
         var h = sketch.map(time % 43200000, 0, 43200000, 0, sketch.TWO_PI) - sketch.HALF_PI;
- 
+
         var lines = [
-          [sketch.cos(h) * $scope.clock.length, sketch.sin(h) * $scope.clock.length],
+          [sketch.cos(s) * $scope.clock.length, sketch.sin(s) * $scope.clock.length],
           [sketch.cos(m) * $scope.clock.length, sketch.sin(m) * $scope.clock.length],
-          [sketch.cos(s) * $scope.clock.length, sketch.sin(s) * $scope.clock.length]
+          [sketch.cos(h) * $scope.clock.length, sketch.sin(h) * $scope.clock.length]
         ];
 
         drawLines(lines, s, m, h);
@@ -86,7 +101,7 @@
         if (value < 0) {
           value += max;
         } else if (value > max) {
-          value %= max;
+          value -= max;
         }
         return value;
       };
@@ -100,21 +115,32 @@
       };
 
       var drawLines = function(lines, s, m, h) {
-        var start, hue, saturation, lightness, alpha, alphaStep, width, widthStep;
+        var start, hue, hueStart, hueShift, hueShiftB, saturation, lightness,
+          alpha, alphaStep, fill, width, widthStep, rotationStep;
 
         // Color
-        hue = $scope.clock.color.hue;
+        hueStart = $scope.clock.color.hue + $scope.clock.color.shift.repetitions;
+        hueShift = -1 * $scope.clock.color.shift.repetitions / $scope.clock.repetitions;
+        hueShiftB = -1 * $scope.clock.color.shift.connections / $scope.clock.connections;
         saturation = $scope.clock.color.saturation;
         lightness = $scope.clock.color.lightness;
-        alpha = $scope.clock.color.alpha;
+        alpha = 0;
+        alphaStep = $scope.clock.color.alpha / $scope.clock.repetitions;
+        rotationStep = $scope.clock.speed * ($scope.clock.phase + m + sketch.HALF_PI);
         
-        alphaStep = parseFloat($scope.clock.connections / 255.0);
-        sketch.translate(200.0, 200.0); // Set origin to center of sketch
+        // Set origin to center of sketch
+        sketch.resetMatrix();
+        sketch.translate(200.0, 200.0);
+
+        // Pre-rotate by total rotations because they vectors are drawn in reverse order
+        sketch.rotate(-1 * $scope.clock.repetitions * rotationStep + sketch.HALF_PI);
 
         for (var r = $scope.clock.repetitions - 1; r >= 0; r--) {
           start = [0.0, 0.0]; // Start from center
-          alpha = $scope.clock.color.alpha;
-          hue = $scope.clock.color.hue;
+          alpha += alphaStep;
+          fill = alpha * $scope.clock.color.fill / 255;
+          hueStart = cycle(hueStart, hueShift, 255);
+          hue = hueStart;
           width = $scope.clock.width * ($scope.clock.repetitions - r) / $scope.clock.repetitions;
           widthStep = width / ($scope.clock.connections * 4);
 
@@ -123,26 +149,29 @@
             width *= 1.25;
           }
 
+          sketch.strokeWeight(width);
+
           for (var c = $scope.clock.connections - 1; c >= 0; c--) {
+            hue = cycle(hue, hueShiftB, 255);
+            sketch.stroke(hue, saturation, lightness, alpha);
+            sketch.fill(hue, saturation, lightness, fill);
+            sketch.beginShape();
+            sketch.vertex(start[0], start[1]);
+
             for (var i = lines.length - 1; i >= 0; i--) {
               var end = [
                 lines[i][0] + start[0],
                 lines[i][1] + start[1]
               ];
 
-              sketch.strokeWeight(width);
-              sketch.stroke(hue, saturation, lightness, alpha);
-              sketch.line(start[0], start[1], end[0], end[1]);
+              sketch.vertex(end[0], end[1]);
               start = end;
-
-              // Step values
-              hue = cycle(hue, $scope.clock.color.shift, 255);
-              alpha = stepDown(alpha, alphaStep);
-              width = stepDown(width, widthStep);
             }
+
+            sketch.endShape();
           }
 
-          sketch.rotate(m + sketch.HALF_PI);
+          sketch.rotate(rotationStep);
         }
       };
     };
