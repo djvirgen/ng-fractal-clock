@@ -88,7 +88,7 @@ canvas{
 
 code, pre{
   font-size: inherit;
-  font-family: consolas, inconsolata, fixed;
+  font-family: consolas, inconsolata, monospace, fixed;
   color: #fff;
 }
 
@@ -100,6 +100,8 @@ pre{
   background: #444;
   padding: 8px;
   border: 1px dashed #555;
+  overflow: auto;
+  height: 600px;
 }
 
 #demo{
@@ -108,6 +110,7 @@ pre{
 
 #sketch{
   float: left;
+  border: 1px solid #555;
 }
 
 #controls{

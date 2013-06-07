@@ -47,17 +47,20 @@
     $scope.clock = {
       width: 2.5,
       length: 40.0,
-      repetitions: 40,
-      connections: 12,
+      repetitions: 50,
+      connections: 10,
       phase: 0.0,
       speed: 2.0,
+      timeShift: 0,
       timezoneOffset: new Date().getTimezoneOffset() * 60000,
+      showTime: false,
+      debug: false,
       color: {
         hue: 160,
         saturation: 255,
         lightness: 255,
         alpha: 200,
-        fill: 80,
+        fill: 127,
         shift: {
           repetitions: 100,
           connections: 100
@@ -82,7 +85,7 @@
         sketch.background(0);
 
         var currentDate = new Date();
-        var time = currentDate.getTime() + $scope.clock.timezoneOffset;
+        var time = currentDate.getTime() - $scope.clock.timezoneOffset + $scope.clock.timeShift;
         var s = sketch.map(time % 60000, 0, 60000, 0, sketch.TWO_PI) - sketch.HALF_PI;
         var m = sketch.map(time % 3600000, 0, 3600000, 0, sketch.TWO_PI) - sketch.HALF_PI;
         var h = sketch.map(time % 43200000, 0, 43200000, 0, sketch.TWO_PI) - sketch.HALF_PI;
@@ -94,6 +97,27 @@
         ];
 
         drawLines(lines, s, m, h);
+        if ($scope.clock.showTime) {
+          drawTime(time);
+        }
+      };
+
+      var drawTime = function(time) {
+        var date = new Date(time + $scope.clock.timezoneOffset);
+        var hours = date.getHours() % 12;
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+        if (hours == 0) {
+          hours = 12;
+        }
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+          seconds = '0' + seconds;
+        }
+        sketch.fill(0, 0, 255, 200);
+        sketch.text('' + hours + ':' + minutes + '.' + seconds, -190, -180);
       };
 
       var cycle = function(value, amount, max) {
@@ -126,16 +150,16 @@
         lightness = $scope.clock.color.lightness;
         alpha = 0;
         alphaStep = $scope.clock.color.alpha / $scope.clock.repetitions;
-        rotationStep = $scope.clock.speed * ($scope.clock.phase + m + sketch.HALF_PI);
+        rotationStep = parseFloat(-1 * m * $scope.clock.speed + sketch.PI);
         
         // Set origin to center of sketch
-        sketch.resetMatrix();
         sketch.translate(200.0, 200.0);
 
-        // Pre-rotate by total rotations because they vectors are drawn in reverse order
-        sketch.rotate(-1 * $scope.clock.repetitions * rotationStep + sketch.HALF_PI);
+        // Pre-rotate by total rotations because the vectors are drawn in reverse order
+        sketch.rotate(-1 * $scope.clock.repetitions * rotationStep);
 
         for (var r = $scope.clock.repetitions - 1; r >= 0; r--) {
+          sketch.rotate(rotationStep);
           start = [0.0, 0.0]; // Start from center
           alpha += alphaStep;
           fill = alpha * $scope.clock.color.fill / 255;
@@ -169,9 +193,10 @@
             }
 
             sketch.endShape();
+            if ($scope.clock.debug && r == 0) {
+              sketch.text(JSON.stringify({lines: lines, rotationStep: rotationStep}, false, 2), -100, -100);
+            }
           }
-
-          sketch.rotate(rotationStep);
         }
       };
     };

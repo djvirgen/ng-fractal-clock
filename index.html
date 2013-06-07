@@ -49,11 +49,19 @@
           <dt>Connections</dt>
           <dd><input type="range" ng-model="clock.connections" min="1" max="40" integer /></dd>
 
+          <dt>Time Shift</dt>
+          <dd><input type="range" ng-model="clock.timeShift" min="0" max="3600000" integer /></dd>
+
+          <dt>Show Time?</dt>
+          <dd><input type="checkbox" ng-model="clock.showTime" /></dd>
+
+          <!--
           <dt>Speed</dt>
           <dd><input type="range" ng-model="clock.speed" min="0" max="50" step="0.1" float /></dd>
 
           <dt>Phase</dt>
           <dd><input type="range" ng-model="clock.phase" min="0" max="6.28" step="0.01" float /></dd>
+          -->
         </dl>
       </div>
     </div>
