@@ -109,12 +109,19 @@ pre{
 }
 
 #sketch{
-  float: left;
   border: 1px solid #555;
+  margin: 0 0 10px;
 }
 
-#controls{
-  margin-left: 420px;
+#sketch.fullscreen{
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
 ul.requirements{

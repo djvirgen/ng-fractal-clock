@@ -44,7 +44,11 @@
   });
 
   fractalClock.controller('FractalClockController', function($scope, $timeout) {
-    $scope.clock = {
+    var defaults = {
+      size: {
+        width: 898,
+        height: 506
+      },
       width: 2.5,
       length: 40.0,
       repetitions: 50,
@@ -68,17 +72,29 @@
       }
     };
 
-    $scope.sketch = function(sketch) {
-      var date;
+    $scope.clock = angular.copy(defaults);
 
-      date = new Date();
+    $scope.sketch = function(sketch) {
+      var date = new Date();
 
       sketch.setup = function() {
-        sketch.size(400, 400);
         sketch.smooth();
         sketch.colorMode(sketch.HSB, 255);
         sketch.strokeCap(sketch.ROUND);
         sketch.strokeJoin(sketch.ROUND);
+
+        $scope.$watch('clock.fullscreen', function(enabled) {
+          if (enabled) {
+            $scope.clock.size = {
+              width: window.innerWidth,
+              height: window.innerHeight
+            };
+          } else {
+            $scope.clock.size = angular.copy(defaults.size);
+          }
+
+          sketch.size($scope.clock.size.width, $scope.clock.size.height);
+        });
       };
 
       sketch.draw = function() {
@@ -153,7 +169,7 @@
         rotationStep = parseFloat(-1 * m * $scope.clock.speed + sketch.PI);
         
         // Set origin to center of sketch
-        sketch.translate(200.0, 200.0);
+        sketch.translate($scope.clock.size.width * 0.5, $scope.clock.size.height * 0.5);
 
         // Pre-rotate by total rotations because the vectors are drawn in reverse order
         sketch.rotate(-1 * $scope.clock.repetitions * rotationStep);
