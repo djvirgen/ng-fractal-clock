@@ -21,8 +21,8 @@
           width = scope.$sketch.width;
           height = scope.$sketch.height;
 
-          scope.$watch(iAttrs.processingFullscreen, function() {
-            var isFullscreen = scope.$eval(iAttrs.processingFullscreen);
+          scope.$watch(iAttrs.processingFullscreen, function(value) {
+            var isFullscreen = value && scope.$eval(value);
             
             if (isFullscreen) {
               scope.$sketch.size(window.innerWidth, window.innerHeight);
