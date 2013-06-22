@@ -17,7 +17,9 @@
       <canvas id="sketch" processing="sketch" processing-fullscreen="clock.fullscreen" focus="clock.fullscreen" ui-keydown="{ esc: 'clock.fullscreen = false' }"></canvas>
       <div id="controls">
         <h3>Settings</h3>
-        <input type="checkbox" ng-model="clock.fullscreen" /> Full Screen
+        <div>
+          <label><input type="checkbox" ng-model="clock.fullscreen" /> Full Screen</label>
+          <label><input type="checkbox" ng-model="clock.showTime" /> Show Time</label>
         <dl>
           <dt>Hue</dt>
           <dd><input type="range" ng-model="clock.color.hue" min="0" max="255" integer /></dd>
@@ -52,9 +54,6 @@
 
           <dt>Time Shift</dt>
           <dd><input type="range" ng-model="clock.timeShift" min="0" max="3600000" integer /></dd>
-
-          <dt>Show Time?</dt>
-          <dd><input type="checkbox" ng-model="clock.showTime" /></dd>
 
           <!--
           <dt>Speed</dt>

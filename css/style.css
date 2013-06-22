@@ -104,6 +104,11 @@ pre{
   height: 600px;
 }
 
+#controls label{
+  display: inline-block;
+  margin-right: 10px;
+} 
+
 #demo{
   overflow: hidden;
 }
