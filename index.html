@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="fractalClock" >
 <head>
   <title>Fractal Clock</title>
   <meta name="title" content="Fractal Clock"></meta>
@@ -11,13 +11,13 @@
   <link href="/css/style.css" rel="stylesheet" type="text/css"></link>
 </head>
 <body>
-  <div ng-app="fractalClock" ng-controller="FractalClockController">
+  <div ng-controller="FractalClockController">
     <h1>Fractal Clock</h1>
     <div id="demo">
-      <canvas id="sketch" processing="sketch" ng-class="{ fullscreen: clock.fullscreen }"></canvas>
+      <canvas id="sketch" processing="sketch" processing-fullscreen="clock.fullscreen" focus="clock.fullscreen" ui-keydown="{ esc: 'clock.fullscreen = false' }"></canvas>
       <div id="controls">
         <h3>Settings</h3>
-        <!-- <input type="checkbox" ng-model="clock.fullscreen" /> Full Screen -->
+        <input type="checkbox" ng-model="clock.fullscreen" /> Full Screen
         <dl>
           <dt>Hue</dt>
           <dd><input type="range" ng-model="clock.color.hue" min="0" max="255" integer /></dd>
@@ -72,6 +72,7 @@
   </div>
 
   <script type="text/javascript" src="/app/lib/angular/angular-1.1.4.min.js"></script>
+  <script type="text/javascript" src="/app/lib/angular-ui/ui.keypress.js"></script>
   <script type="text/javascript" src="/app/lib/processing/processing-1.4.1.min.js"></script>
   <script type="text/javascript" src="/app/app.js"></script>
 

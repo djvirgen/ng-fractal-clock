@@ -1,7 +1,7 @@
 (function() {
   "use strict";
   
-  var fractalClock = angular.module('fractalClock', []);
+  var fractalClock = angular.module('fractalClock', ['ui.keypress']);
 
   fractalClock.directive('processing', function() {
     return {
@@ -9,6 +9,40 @@
       link: function(scope, iElement, iAttrs) {
         scope.$sketch = new Processing(iElement[0], scope[iAttrs.processing]);
       }
+    };
+  });
+
+  fractalClock.directive('processingFullscreen', ['$timeout', function($timeout) {
+    return {
+      link: function(scope, iElement, iAttrs) {
+        var width, height;
+        
+        $timeout(function() {
+          width = scope.$sketch.width;
+          height = scope.$sketch.height;
+
+          scope.$watch(iAttrs.processingFullscreen, function() {
+            var isFullscreen = scope.$eval(iAttrs.processingFullscreen);
+            
+            if (isFullscreen) {
+              scope.$sketch.size(window.innerWidth, window.innerHeight);
+              iElement.addClass('fullscreen');
+            } else {
+              scope.$sketch.size(width, height);
+              iElement.removeClass('fullscreen');
+            }
+          });
+        });
+      }
+    };
+  }]);
+
+  // Focus an element when its 'focus' attribute evaluates to true
+  fractalClock.directive('focus', function() {
+    return function(scope, iElement, iAttr) {
+      scope.$watch(iAttr.focus, function(focus) {
+        if (focus) iElement[0].focus();
+      });
     };
   });
 
@@ -82,19 +116,8 @@
         sketch.colorMode(sketch.HSB, 255);
         sketch.strokeCap(sketch.ROUND);
         sketch.strokeJoin(sketch.ROUND);
-
-        $scope.$watch('clock.fullscreen', function(enabled) {
-          if (enabled) {
-            $scope.clock.size = {
-              width: window.innerWidth,
-              height: window.innerHeight
-            };
-          } else {
-            $scope.clock.size = angular.copy(defaults.size);
-          }
-
-          sketch.size($scope.clock.size.width, $scope.clock.size.height);
-        });
+        sketch.size($scope.clock.size.width, $scope.clock.size.height);
+        sketch.frameRate(30);
       };
 
       sketch.draw = function() {
@@ -169,7 +192,7 @@
         rotationStep = parseFloat(-1 * m * $scope.clock.speed + sketch.PI);
         
         // Set origin to center of sketch
-        sketch.translate($scope.clock.size.width * 0.5, $scope.clock.size.height * 0.5);
+        sketch.translate(sketch.width * 0.5, sketch.height * 0.5);
 
         // Pre-rotate by total rotations because the vectors are drawn in reverse order
         sketch.rotate(-1 * $scope.clock.repetitions * rotationStep);
