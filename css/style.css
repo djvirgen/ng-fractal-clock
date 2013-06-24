@@ -102,12 +102,29 @@ pre{
   border: 1px dashed #555;
   overflow: auto;
   height: 600px;
+  white-space: pre;
 }
 
 #controls label{
   display: inline-block;
   margin-right: 10px;
-} 
+}
+
+#controls.fullscreen{
+  position: fixed;
+  opacity: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  -webkit-transition: all ease 0.35s;
+}
+
+#controls.fullscreen:hover{
+  opacity: 0.9;
+}
 
 #demo{
   overflow: hidden;
@@ -126,6 +143,7 @@ pre{
   bottom: 0;
   margin: 0;
   padding: 0;
+  z-index: 100;
   border: none;
 }
 

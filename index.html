@@ -15,12 +15,19 @@
     <h1>Fractal Clock</h1>
     <div id="demo">
       <canvas id="sketch" processing="sketch" processing-fullscreen="clock.fullscreen" focus="clock.fullscreen" ui-keydown="{ esc: 'clock.fullscreen = false' }"></canvas>
-      <div id="controls">
+      <div id="controls" ng-class="{ fullscreen: clock.fullscreen }">
         <h3>Settings</h3>
         <div>
           <label><input type="checkbox" ng-model="clock.fullscreen" /> Full Screen</label>
           <label><input type="checkbox" ng-model="clock.showTime" /> Show Time</label>
         <dl>
+          <dt>Mode</dt>
+          <dd>
+            <label><input type="radio" ng-model="clock.mode" value="normal" />Normal</label>
+            <label><input type="radio" ng-model="clock.mode" value="twist" />Twist</label>
+            <label><input type="radio" ng-model="clock.mode" value="blackhole" />Black Hole</label>
+          </dd>
+
           <dt>Hue</dt>
           <dd><input type="range" ng-model="clock.color.hue" min="0" max="255" integer /></dd>
 
