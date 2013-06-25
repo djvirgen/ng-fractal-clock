@@ -166,7 +166,7 @@
           seconds = '0' + seconds;
         }
         sketch.fill(0, 0, 255, 200);
-        sketch.text('' + hours + ':' + minutes + '.' + seconds, -0.4 * sketch.width, -0.4 * sketch.height);
+        sketch.text('' + hours + ':' + minutes + '.' + seconds, -0.45 * sketch.width, -0.45 * sketch.height);
       };
 
       var cycle = function(value, amount, max) {
@@ -267,7 +267,8 @@
 
             // Debugging
             if ($scope.clock.debug && r == 0) {
-              sketch.text(JSON.stringify({lines: lines, rotationStep: rotationStep}, false, 2), -100, -100);
+              sketch.text(JSON.stringify({lines: lines, calcs: calcs}, false, 2), -0.4 * sketch.width, -0.4 * sketch.height);
+              sketch.text(JSON.stringify({clock: $scope.clock}, false, 2), 0.2 * sketch.width, -0.4 * sketch.height);
             }
           }
         }

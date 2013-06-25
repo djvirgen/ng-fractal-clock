@@ -17,9 +17,10 @@
       <canvas id="sketch" processing="sketch" processing-fullscreen="clock.fullscreen" focus="clock.fullscreen" ui-keydown="{ esc: 'clock.fullscreen = false' }"></canvas>
       <div id="controls" ng-class="{ fullscreen: clock.fullscreen }">
         <h3>Settings</h3>
-        <div>
+        <div class="options">
           <label><input type="checkbox" ng-model="clock.fullscreen" /> Full Screen</label>
           <label><input type="checkbox" ng-model="clock.showTime" /> Show Time</label>
+          <label><input type="checkbox" ng-model="clock.debug" /> Debug</label>
         <dl>
           <dt>Mode</dt>
           <dd>

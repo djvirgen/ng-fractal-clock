@@ -40,14 +40,14 @@ hr{
 }
 
 dl{
-  margin: 0;
+  margin: 10px 0 0;
   padding: 0;
   list-style-type: none;
 }
 
 dl dt{
   float: left;
-  width: 100px;
+  width: 120px;
   margin: 0;
   padding: 5px 0;
 }
@@ -55,10 +55,10 @@ dl dt{
 dl dd{
   margin: 0;
   padding: 5px 0;
-  margin-left: 110px;
+  margin-left: 130px;
 }
 
-dl dd input{
+dl dd input[type="range"]{
   width: 100%;
   font-family: inherit;
 }
@@ -124,6 +124,10 @@ pre{
 
 #controls.fullscreen:hover{
   opacity: 0.9;
+}
+
+#controls .options{
+  margin: 10px 0;
 }
 
 #demo{
