@@ -80,6 +80,10 @@
         width: 898,
         height: 506
       },
+      origin: {
+        left: 0.5,
+        top: 0.5
+      },
       mode: 'normal',
       width: 2.5,
       length: 80.0,
@@ -89,6 +93,7 @@
       speed: 1.0,
       timeShift: 0,
       timezoneOffset: new Date().getTimezoneOffset() * 60000,
+      fullscreen: false,
       showTime: false,
       debug: false,
       color: {
@@ -119,6 +124,11 @@
           calcs.length = $scope.clock.length * sketch.width / $scope.clock.size.width;
         });
       }, true);
+
+      sketch.mouseClicked = function() {
+        $scope.clock.origin.left = sketch.mouseX / sketch.width;
+        $scope.clock.origin.top = sketch.mouseY / sketch.height;
+      };
 
       sketch.setup = function() {
         sketch.smooth();
@@ -202,7 +212,7 @@
         rotationStep = parseFloat(-1 * m * $scope.clock.speed + sketch.PI);
         
         // Set origin to center of sketch
-        sketch.translate(sketch.width * 0.5, sketch.height * 0.5);
+        sketch.translate(sketch.width * $scope.clock.origin.left, sketch.height * $scope.clock.origin.top);
 
         // Pre-rotate by total rotations because the vectors are drawn in reverse order
         sketch.rotate(-1 * $scope.clock.repetitions * rotationStep);
@@ -235,20 +245,27 @@
 
             for (var i = lines.length - 1; i >= 0; i--) {
               switch ($scope.clock.mode) {
-                case 'blackhole':
-                  var end = [
-                    lines[i][0] - start[0],
-                    lines[i][1] - start[1]
-                  ];
-                  break;
-
-                case 'twist':
+                case 'star':
                   var end = (i % 2 == 0) ? [
                     lines[i][0] + start[0],
                     lines[i][1] + start[1]
                   ] : [
                     lines[i][0] - start[0],
-                    lines[i][1] + start[1]
+                    lines[i][1] - start[1]
+                  ];
+                  break;
+
+                case 'nebula':
+                  var end = [
+                    (lines[i][0] - start[0]) * 1.5 * c / $scope.clock.connections,
+                    (lines[i][1] + start[1]) * 1.5 * r / $scope.clock.repetitions
+                  ];
+                  break;
+
+                case 'blackhole':
+                  var end = [
+                    lines[i][0] + start[0],
+                    lines[i][1] - start[1]
                   ];
                   break;
 
@@ -266,8 +283,9 @@
             sketch.endShape();
 
             // Debugging
-            if ($scope.clock.debug && r == 0) {
-              sketch.text(JSON.stringify({lines: lines, calcs: calcs}, false, 2), -0.4 * sketch.width, -0.4 * sketch.height);
+            if ($scope.clock.debug && r == 0 && c == 0) {
+              sketch.fill(hue, saturation, lightness, 255);
+              sketch.text(JSON.stringify({lines: lines, s: s, m: m, h: h, calcs: calcs}, false, 2), -0.4 * sketch.width, -0.4 * sketch.height);
               sketch.text(JSON.stringify({clock: $scope.clock}, false, 2), 0.2 * sketch.width, -0.4 * sketch.height);
             }
           }
